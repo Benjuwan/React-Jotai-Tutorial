@@ -84,3 +84,24 @@ return (
   </>
 );
 ```
+
+### 備忘録
+- `git init`～`push`の流れ<br />
+
+```
+git init // 新しいリポジトリの初期セットアップ時に使用するワンタイムコマンド。このコマンドを実行すると現在の作業ディレクトリ内に新しい.gitサブディレクトリが作成される。これによって、新しい main ブランチも作成される。
+
+Initialized empty Git repository in [自身の作業ディレクトリのパス] // この表記が出ているとok.
+
+
+git add . // 必要に応じてファイルを選択。
+
+git commit -m"first commit" // メッセージは適当なものを。
+
+git push -u origin main // ローカルリポジトリの変更を、リモートリポジトリの origin [指定したブランチ] に反映させる。
+
+
+git push // リモートリポジトリへpush.
+
+Everything up-to-date // この表記が出るとok.
+```
