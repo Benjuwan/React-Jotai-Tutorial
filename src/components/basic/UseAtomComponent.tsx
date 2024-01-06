@@ -1,8 +1,6 @@
 import { Provider, atom, createStore, useAtom } from "jotai"
 import { CountUpdateBtn } from "./CountUpdateBtn"
 
-
-
 const valueAtom = atom(100)
 const addingValueAtom = atom(
     (get) => get(valueAtom) / 2,
@@ -22,8 +20,6 @@ const addingPricesAtom = atom(
     },
 )
 
-
-
 /* Store によるグローバルステートの取り扱い */
 const countsAtom = atom(0) // グローバルステート
 const countsStore = createStore() // storeを宣言
@@ -41,8 +37,6 @@ const Counter = () => {
         </>
     )
 }
-
-
 
 /* ↑↑↑ atom の宣言はコンポーネントの範囲外で行う ↑↑↑ */
 export const UseAtomComponent = () => {

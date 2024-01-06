@@ -7,7 +7,13 @@
 ## メモ
 
 - `atom`<br />
-最小限の（更新・購読可能な）単位の状態。`number`, `string`, `object`など各種「型」のデータを（`State`）変数のような形で取り扱える。
+最小限の（更新・購読可能な）単位の状態。`number`, `string`, `object`など各種「型」のデータ・値を（`State`）変数のような形で取り扱える。
+
+```
+const priceAtom = atom(10);
+const messageAtom = atom('hello');
+const productAtom = atom({ id: 12, name: 'good stuff' });
+```
 
 - `useAtom`<br />
 `atom`を読み込んで状態管理を行う変数にセットする。`React`の`useState`とほとんど同じインターフェース。
@@ -22,8 +28,12 @@ const [value, setValue] = useAtom(atom);
 // UseAtomComponent.tsx
 
 /* ↑↑↑ atom の宣言はコンポーネントの範囲外で行う ↑↑↑ */
+..
+.
 export const UseAtomComponent = () => {
-    /* ↓↓↓ useAtom はコンポーネントの範囲内で使用する ↓↓↓ */
+.
+..
+/* ↓↓↓ useAtom はコンポーネントの範囲内で使用する ↓↓↓ */
 ```
 
 - `Store`<br />
