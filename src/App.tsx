@@ -3,6 +3,7 @@ import { AtomComponent } from "./components/basic/AtomComponent";
 import { UseAtomComponent } from "./components/basic/UseAtomComponent";
 import { TodoList } from './components/practice/TodoList';
 import { DefaultTodoList } from './components/DefaultTodoList';
+import { BaseComponent } from './components/application/BaseComponent';
 
 export const App = () => {
   return (
@@ -12,9 +13,13 @@ export const App = () => {
         <TodoList />
       </div>
       <div style={{ 'marginBottom': '5em' }}>
+        <p style={{ 'margin': '0' }}>DefaultTodoList</p>
+        <DefaultTodoList />
+      </div>
+      <div style={{ 'marginBottom': '5em' }}>
         <UseAtomComponent />
       </div>
-      <DefaultTodoList />
+      <BaseComponent />
     </Provider>
   );
 }

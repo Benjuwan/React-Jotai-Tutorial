@@ -15,6 +15,28 @@ const messageAtom = atom('hello');
 const productAtom = atom({ id: 12, name: 'good stuff' });
 ```
 
+  - 配列の場合<br />
+  `Jotai` の `atom` はデフォルトでは初期値の型を `never`（値を持たない型）として扱う。これに対処するためには、**`atom`を作成する際にジェネリクスを使用して初期値の型を指定**する。
+
+  ```
+  .
+  ..
+  export type pokeList = {
+    name: string;
+    url: string;
+  }
+  ..
+  .
+  const defaultPokeData: pokeList = {
+    name: '【hogemon】---',
+    url: 'https://example.com/hogemon'
+  }
+  ..
+  .
+  const initialPokeData: pokeList[] = [defaultPokeData]; // 初期値をセット
+  const pokeList = atom(initialPokeData); // 初期値を atom に store を宣言
+  ```
+
 - `useAtom`<br />
 `atom`を読み込んで状態管理を行う変数にセットする。`React`の`useState`とほとんど同じインターフェース。
 
