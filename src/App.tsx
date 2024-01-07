@@ -9,7 +9,7 @@ export const App = () => {
   return (
     <Provider>
       {/* <AtomComponent /> */}
-      <div style={{ 'marginBottom': '5em' }}>
+      {/* <div style={{ 'marginBottom': '5em' }}>
         <TodoList />
       </div>
       <div style={{ 'marginBottom': '5em' }}>
@@ -18,7 +18,7 @@ export const App = () => {
       </div>
       <div style={{ 'marginBottom': '5em' }}>
         <UseAtomComponent />
-      </div>
+      </div> */}
       <BaseComponent />
     </Provider>
   );
