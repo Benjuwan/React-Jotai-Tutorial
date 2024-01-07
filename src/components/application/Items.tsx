@@ -1,56 +1,32 @@
-import { atom, useAtom } from "jotai";
+import { useAtom } from "jotai";
 import { pokeDataType, pokeListType } from "./ts/pokedata";
 import { useFetchPokeData } from "./hooks/useFecthPokeData";
-import { SingleData } from "./SingleData";
-import { MultiData } from "./MultiData";
+import { pokeItemAtom, pokeListAtom } from "./ts/atom";
 
 type itemsPropsType = {
     pokeData: pokeListType[]; // pokeListType[]：配列（オブジェクト）として扱うことで map などループ処理が利用可能
 }
 
-const defaultPokeData: pokeDataType = {
-    name: '【hogemon】---',
-    weight: 100,
-    height: 100
-}
-
-/* Jotai の atom はデフォルトでは初期値の型を never として扱います。これに対処するためには、atom を作成する際にジェネリクスを使用して、初期値の型を指定することができます。 */
-const initialPokeData: pokeDataType = defaultPokeData;
-const pokeItemAtom = atom(initialPokeData); // store を宣言
-
-/* -------------- atom はコンポーネントの範囲外で宣言 -------------- */
-
-const initialPokeList: pokeDataType[] = [defaultPokeData];
-const pokeListAtom = atom(initialPokeList); // store を宣言
-
-/* -------------- atom はコンポーネントの範囲外で宣言 -------------- */
-
 export const Items = ({ pokeData }: itemsPropsType) => {
     const paragraphStyle: object = {
+        'cursor': 'pointer',
         'lineHeight': '1.2',
         'fontSize': '14px',
         'margin': '1em 0 0',
     }
 
-    const ankerStyle: object = {
-        'lineHeight': '1',
-        'textDecoration': 'none',
-        'fontSize': '12px'
-    }
+    const { FetchPokeData } = useFetchPokeData();
 
     /* -------------- useAtom はコンポーネントの範囲内でok -------------- */
 
     /* Single Mode */
-    const [pokeItem, setPokeItem] = useAtom(pokeItemAtom);
-    const { FetchPokeData } = useFetchPokeData();
+    const [, setPokeItem] = useAtom(pokeItemAtom); // 更新関数のみ用意（変数は使用しないので無し）
     const fetchPokeDataSetItem = (pokemonUrl: string) => {
         const pokemons: Promise<pokeDataType> = FetchPokeData(pokemonUrl);
         pokemons.then((data) => {
-            setPokeItem((_prevPokeItem) => data);
+            setPokeItem((_prevPokeItem) => data); // フェッチしたデータを pokeItemAtom に格納
         });
     }
-
-    // console.log(pokeItem);
 
     /* -------------- useAtom はコンポーネントの範囲内でok -------------- */
 
@@ -59,22 +35,19 @@ export const Items = ({ pokeData }: itemsPropsType) => {
     const fetchPokeDataSetList = (pokemonUrl: string) => {
         const pokemons: Promise<pokeDataType> = FetchPokeData(pokemonUrl);
         pokemons.then((data) => {
-            setPokeList((_prevPokeList) => [...pokeList, data]);
+            setPokeList((_prevPokeList) => [...pokeList, data]); // フェッチしたデータを pokeListAtom に格納
         });
     }
-
-    // console.log(pokeList);
 
     return (
         <>
             {pokeData.map((pokemon, i) => (
                 <div style={{ 'width': '25%' }} key={i}>
-                    <p style={paragraphStyle}>{pokemon.name}</p>
-                    <a style={ankerStyle} onClick={() => fetchPokeDataSetItem(pokemon.url)} target="_blank">{pokemon.url}</a>
+                    <h2 style={{ 'fontSize': '16px' }}>--- {pokemon.name}</h2>
+                    <p style={paragraphStyle} onClick={() => fetchPokeDataSetItem(pokemon.url)}>ポケモンの差替<span hidden>pokeItemAtom 更新</span></p>
+                    <p style={paragraphStyle} onClick={() => fetchPokeDataSetList(pokemon.url)}>ポケモンの追加<span hidden>pokeListAtom 更新</span></p>
                 </div>
             ))}
-            <SingleData pokeItem={pokeItem} />
-            {/* <MultiData pokeList={pokeList} /> */}
         </>
     );
 }

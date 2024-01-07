@@ -1,11 +1,6 @@
 import { atom } from 'jotai'
 import type { PrimitiveAtom } from 'jotai'
 
-/**
- * コンポーネントの設計後に、想定できる範囲内のグローバルステートを宣言しておく（ことで無駄なステートを増やさない）
- * ステートの追記が必要な度に atom.ts に記載していく方針
-*/
-
 export type Todo = {
     title: string
     completed: boolean
