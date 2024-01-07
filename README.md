@@ -15,48 +15,81 @@ const messageAtom = atom('hello');
 const productAtom = atom({ id: 12, name: 'good stuff' });
 ```
 
-  - 配列の場合<br />
-  `Jotai` の `atom` はデフォルトでは初期値の型を `never`（値を持たない型）として扱う。これに対処するためには、**`atom`を作成する際にジェネリクスを使用して初期値の型を指定**する。
+- 配列の場合<br />
+`Jotai` の `atom` はデフォルトでは初期値の型を `never`（値を持たない型）として扱う。これに対処するためには、**`atom`を作成する際にジェネリクスを使用して初期値の型を指定**する。
 
-  ```
-  .
-  ..
-  export type pokeList = {
-    name: string;
-    url: string;
-  }
-  ..
-  .
-  const defaultPokeData: pokeList = {
-    name: '【hogemon】---',
-    url: 'https://example.com/hogemon'
-  }
-  ..
-  .
-  const initialPokeData: pokeList[] = [defaultPokeData]; // 初期値をセット
-  const pokeList = atom(initialPokeData); // 初期値を atom に store を宣言
-  ```
+```  
+.
+..
+export type pokeList = {
+  name: string;
+  url: string;
+}
+..
+.
+const defaultPokeData: pokeList = {
+  name: '【hogemon】---',
+  url: 'https://example.com/hogemon'
+}
+..
+.
+const initialPokeData: pokeList[] = [defaultPokeData]; // 初期値をセット
+const pokeList = atom(initialPokeData); // atom の作成
+```
+
+- `atom`の宣言はコンポーネントの範囲外で、`useAtom`はコンポーネントの範囲内で使用する（※ログに警告が出る：Warning: Maximum update depth exceeded...）<br />ただし一般的に`atom`の宣言は、**コンポーネント間での`atom`共有を考慮して外部ファイル（例：`ts/atom.ts`）で定義**する。
+
+```
+/* ------- atom の宣言はコンポーネントの範囲外で行う ------- */
+export const TheComponent = () => {
+/* ------- useAtom はコンポーネントの範囲内で使用する ------- */
+```
 
 - `useAtom`<br />
-`atom`を読み込んで状態管理を行う変数にセットする。`React`の`useState`とほとんど同じインターフェース。
+  - `atom`を読み込んで状態管理を行う変数にセットする。`React`の`useState`とほとんど同じインターフェース。
 
-```
-const [value, setValue] = useAtom(atom);
-```
+  ```
+  const [value, setValue] = useAtom(atom);
+  ```
 
-- `atom`の宣言はコンポーネントの範囲外で、`useAtom`はコンポーネントの範囲内で使用する（※ログに警告が出る：Warning: Maximum update depth exceeded...）
+  - `useAtom`は`Context`の`useContext`と似たような働きも持つ。`atom`を外部ファイルで管理してコンポーネント間での`atom`（State）の共有を行える。
 
-```
-// UseAtomComponent.tsx
+    - `atom`の更新<br />
+    ```
+    // Items.tsx
+    .
+    /* Single Mode */
+        const [, setPokeItem] = useAtom(pokeItemAtom); // 更新関数のみ用意（変数は使用しないので無し）
+        const fetchPokeDataSetItem = (pokemonUrl: string) => {
+            const pokemons: Promise<pokeDataType> = FetchPokeData(pokemonUrl);
+            pokemons.then((data) => {
+                setPokeItem((_prevPokeItem) => data); // フェッチしたデータを pokeItemAtom に格納
+            });
+        }
 
-/* ↑↑↑ atom の宣言はコンポーネントの範囲外で行う ↑↑↑ */
-..
-.
-export const UseAtomComponent = () => {
-.
-..
-/* ↓↓↓ useAtom はコンポーネントの範囲内で使用する ↓↓↓ */
-```
+
+    /* Multi Mode */
+        const [pokeList, setPokeList] = useAtom(pokeListAtom);
+        const fetchPokeDataSetList = (pokemonUrl: string) => {
+            const pokemons: Promise<pokeDataType> = FetchPokeData(pokemonUrl);
+            pokemons.then((data) => {
+                setPokeList((_prevPokeList) => [...pokeList, data]); // フェッチしたデータを pokeListAtom に格納
+            });
+        }
+    ```
+
+  上の処理で更新された`atom`（State）を呼び出して使用。
+
+  ```
+  // BaseComponent.tsx
+  .
+  import { pokeItemAtom, pokeListAtom } from "./ts/atom";
+  ..
+  .
+  /* -------- 外部ファイル（ts/atom.ts）で宣言した atom を呼び出して使用する -------- */
+  const [pokeItem] = useAtom(pokeItemAtom);
+  const [pokeList] = useAtom(pokeListAtom);
+  ```
 
 - `Store`<br />
 共有するデータの保管場所を定義するもの。`createStore`を使用することで、新しい空のストアを作成することができ、下記の3つのメソッドを持っている。

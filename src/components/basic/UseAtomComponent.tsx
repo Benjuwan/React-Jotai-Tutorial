@@ -1,7 +1,15 @@
 import { Provider, atom, createStore, useAtom } from "jotai"
+import { countsAtom } from "./ts/atom"
+import { CountBtn } from "./CountBtn"
 import { CountUpdateBtn } from "./CountUpdateBtn"
 
 const valueAtom = atom(100)
+/**
+ * 以下の処理を事前に atom として用意しておける
+ *（valueには50がセットされ、setVal(x)でvalueの値をx倍する）
+ * const [value, setVal] = useAtom(valueAtom)
+ * const setValue = (x: number) => setVal((_prevVal) => value * x);
+*/
 const addingValueAtom = atom(
     (get) => get(valueAtom) / 2,
     (get, set, num: number) => {
@@ -9,9 +17,13 @@ const addingValueAtom = atom(
     },
 )
 
-// 初期値を宣言
 const pricesAtom = atom(100)
-// pricesAtomからread/writeな派生atomを宣言
+/**
+ * 以下の処理を事前に atom として用意しておける
+ * const [prices, addPrice] = useAtom(pricesAtom)
+ * const addPrices = (x: number) => addPrice((_prevVal) => prices + x);
+*（read関数で読み込まれた値がpriceにセットされる）
+*/
 const addingPricesAtom = atom(
     (get) => get(pricesAtom), // read関数ではそのままpricesAtomの値を返す
     (get, set, num: number) => {
@@ -20,33 +32,22 @@ const addingPricesAtom = atom(
     },
 )
 
-/* Store によるグローバルステートの取り扱い */
-const countsAtom = atom(0) // グローバルステート
+/* --------- Store によるグローバルステートの取り扱い ---------  */
 const countsStore = createStore() // storeを宣言
 countsStore.set(countsAtom, 100) // storeの中にcountsAtomを初期値100としてセットする
 
-// ボタンを押すと+1されるカウンター
-const Counter = () => {
-    const [count, setCount] = useAtom(countsAtom);
-    return (
-        <>
-            <div>Counter：{count}</div>
-            <button onClick={() => setCount((p) => p + 1)}>
-                +1するボタン
-            </button>
-        </>
-    )
-}
-
-/* ↑↑↑ atom の宣言はコンポーネントの範囲外で行う ↑↑↑ */
+/* --------- atom の宣言はコンポーネントの範囲外で行う --------- */
 export const UseAtomComponent = () => {
-    /* ↓↓↓ useAtom はコンポーネントの範囲内で使用する ↓↓↓ */
+/* --------- useAtom はコンポーネントの範囲内で使用する --------- */
 
-    // valueには50がセットされ、setValue(x)でvalueの値をx倍する
-    const [value, setValue] = useAtom(addingValueAtom)
+    // const [value, setValue] = useAtom(addingValueAtom)
+    const [value, setVal] = useAtom(valueAtom)
+    const setValue = (x: number) => setVal((_prevVal) => value * x);
 
-    // read関数で読み込まれた値がpriceにセットされる
-    const [prices, addPrices] = useAtom(addingPricesAtom)
+    // const [prices, addPrices] = useAtom(addingPricesAtom)
+    const [prices, addPrice] = useAtom(pricesAtom)
+    const addPrices = (x: number) => addPrice((_prevVal) => prices + x);
+
     return (
         <>
             <div style={{ 'display': 'flex', 'gap': '2%' }}>
@@ -58,15 +59,15 @@ export const UseAtomComponent = () => {
                     <b>value：{value}</b><br />値（初期値：50）を2倍にしていく
                 </button>
             </div>
-            {/* Store によるグローバルステートの取り扱い */}
+            {/* --------- Store によるグローバルステートの取り扱い --------- */}
             <Provider store={countsStore}>
                 <h1>Proverで切り分けした空間</h1>
-                <CountUpdateBtn countsAtom={countsAtom} />
-                <CountUpdateBtn countsAtom={countsAtom} />
-                <Counter />
+                <CountUpdateBtn />
+                <CountUpdateBtn />
+                <CountBtn />
             </Provider>
             <h1>グローバルステート空間</h1>
-            <Counter />
+            <CountBtn />
         </>
     )
 }

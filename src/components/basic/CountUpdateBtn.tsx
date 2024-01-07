@@ -1,21 +1,7 @@
-import { FC } from "react";
-import { PrimitiveAtom, useAtom } from "jotai";
+import { useAtom } from "jotai";
+import { countsAtom } from "./ts/atom";
 
-/* 
-    WithInitialValue は 以下の型定義ファイルにて
-    [\node_modules\jotai\esm\vanilla\atom.d.mts] or
-    [\node_modules/jotai/vanilla/atom.d.ts]
-    以下の形で型定義されている。
-*/
-type WithInitialValue<Value> = {
-    init: Value;
-};
-
-type props = {
-    countsAtom: PrimitiveAtom<number> & WithInitialValue<number>
-}
-
-export const CountUpdateBtn: FC<props> = ({ countsAtom }) => {
+export const CountUpdateBtn = () => {
     const [count, setCount] = useAtom(countsAtom);
     return (
         <>
