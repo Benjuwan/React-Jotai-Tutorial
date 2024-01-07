@@ -44,7 +44,7 @@ export const Items = ({ pokeData }: itemsPropsType) => {
             {pokeData.map((pokemon, i) => (
                 <div style={{ 'width': '25%' }} key={i}>
                     <h2 style={{ 'fontSize': '16px' }}>--- {pokemon.name}</h2>
-                    <p style={paragraphStyle} onClick={() => fetchPokeDataSetItem(pokemon.url)}>ポケモンの差替<span hidden>pokeItemAtom 更新</span></p>
+                    <p style={paragraphStyle} onClick={() => fetchPokeDataSetItem(pokemon.url)}>ポケモンの入れ替え<span hidden>pokeItemAtom 更新</span></p>
                     <p style={paragraphStyle} onClick={() => fetchPokeDataSetList(pokemon.url)}>ポケモンの追加<span hidden>pokeListAtom 更新</span></p>
                 </div>
             ))}

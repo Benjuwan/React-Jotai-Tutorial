@@ -14,10 +14,14 @@ export const SingleData = ({ pokeItem }: singleDataPropsType) => {
     }
 
     return (
-        <div style={itemStyle}>
-            <p>name：{pokeItem.name}</p>
-            <p>weight：{pokeItem.weight} / height：{pokeItem.height}</p>
-            <img src={pokeItem.sprites?.front_default} alt={pokeItem.name} />
-        </div>
+        <>
+            {pokeItem.name !== undefined &&
+                <div style={itemStyle}>
+                    <p>name：{pokeItem.name}</p>
+                    <p>weight：{pokeItem.weight} / height：{pokeItem.height}</p>
+                    <img src={pokeItem.sprites?.front_default} alt={pokeItem.name} />
+                </div>
+            }
+        </>
     );
 }
