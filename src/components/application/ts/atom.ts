@@ -12,8 +12,10 @@ const defaultPokeData: pokeDataType = {
     height: 100
 }
 
+const defaultPokeSingleData: pokeDataType = { name: undefined }
+
 /* Jotai の atom はデフォルトでは初期値の型を never として扱います。これに対処するためには、atom を作成する際にジェネリクスを使用して、初期値の型を指定することができます。*/
-const initialPokeData: pokeDataType = defaultPokeData;
+const initialPokeData: pokeDataType = defaultPokeSingleData;
 export const pokeItemAtom = atom(initialPokeData); // store を宣言
 
 const initialPokeList: pokeDataType[] = [defaultPokeData];

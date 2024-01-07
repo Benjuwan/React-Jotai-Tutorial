@@ -15,9 +15,9 @@ export type pokeListType = {
 }
 
 export type pokeDataType = {
-    name: string;
-    weight: number;
-    height: number;
+    name?: string;
+    weight?: number;
+    height?: number;
     sprites?: {
         front_default: string;
     }
