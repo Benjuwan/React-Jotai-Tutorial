@@ -21,20 +21,15 @@ const productAtom = atom({ id: 12, name: 'good stuff' });
 ```  
 .
 ..
-export type pokeList = {
-  name: string;
-  url: string;
+const defaultPokeListData: pokeDataType = {
+    name: '【hogemon】---',
+    weight: 100,
+    height: 100
 }
+
+export const pokeListAtom = atom([defaultPokeListData]);
 ..
 .
-const defaultPokeData: pokeList = {
-  name: '【hogemon】---',
-  url: 'https://example.com/hogemon'
-}
-..
-.
-const initialPokeData: pokeList[] = [defaultPokeData]; // 初期値をセット
-const pokeList = atom(initialPokeData); // atom の作成
 ```
 
 - `atom`の宣言はコンポーネントの範囲外で、`useAtom`はコンポーネントの範囲内で使用する（※ログに警告が出る：Warning: Maximum update depth exceeded...）<br />ただし一般的に`atom`の宣言は、**コンポーネント間での`atom`共有を考慮して外部ファイル（例：`ts/atom.ts`）で定義**する。

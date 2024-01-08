@@ -1,5 +1,5 @@
-import { countsAtom } from "./ts/atom";
 import { useAtom } from "jotai";
+import { countsAtom } from "./ts/atom";
 
 // ボタンを押すと+1されるカウンター
 export const CountBtn = () => {

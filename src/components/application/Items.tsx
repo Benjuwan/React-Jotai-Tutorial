@@ -9,11 +9,21 @@ type itemsPropsType = {
 
 export const Items = ({ pokeData }: itemsPropsType) => {
     const paragraphStyle: object = {
-        'cursor': 'pointer',
-        'lineHeight': '1.2',
-        'fontSize': '14px',
-        'margin': '1em 0 0',
-    }
+        cursor: "pointer",
+        lineHeight: "1.2",
+        fontSize: "14px",
+        margin: "1em 0 0",
+    };
+
+    const changePokeStyle: object = {
+        ...paragraphStyle, // スプレッド構文でオブジェクトを展開
+        color: "blue",
+    };
+
+    const addPokeStyle: object = {
+        ...paragraphStyle,
+        color: "red",
+    };
 
     const { FetchPokeData } = useFetchPokeData();
 
@@ -44,8 +54,8 @@ export const Items = ({ pokeData }: itemsPropsType) => {
             {pokeData.map((pokemon, i) => (
                 <div style={{ 'width': '25%' }} key={i}>
                     <h2 style={{ 'fontSize': '16px' }}>--- {pokemon.name}</h2>
-                    <p style={paragraphStyle} onClick={() => fetchPokeDataSetItem(pokemon.url)}>・ポケモンの入れ替え<span hidden>pokeItemAtom 更新</span></p>
-                    <p style={paragraphStyle} onClick={() => fetchPokeDataSetList(pokemon.url)}>・ポケモンの追加<span hidden>pokeListAtom 更新</span></p>
+                    <p style={changePokeStyle} onClick={() => fetchPokeDataSetItem(pokemon.url)}>・ポケモンの入れ替え<span hidden>pokeItemAtom 更新</span></p>
+                    <p style={addPokeStyle} onClick={() => fetchPokeDataSetList(pokemon.url)}>・ポケモンの追加<span hidden>pokeListAtom 更新</span></p>
                 </div>
             ))}
         </>
