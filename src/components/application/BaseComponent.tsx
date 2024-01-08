@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
-import { pokeItemAtom, pokeListAtom } from "./ts/atom";
+import { pokeItemAtom } from "./ts/atom";
 import { pokeListType } from "./ts/pokedata";
 import { Items } from "./Items";
 import { SingleData } from "./SingleData";
@@ -16,7 +16,6 @@ export const BaseComponent = () => {
 
     /* -------- 外部ファイル（ts/atom.ts）で宣言した atom を呼び出して使用する -------- */
     const [pokeItem] = useAtom(pokeItemAtom);
-    const [pokeList] = useAtom(pokeListAtom);
 
     const [pokeData, setPokeData] = useState<pokeListType[]>([]); // fecth 処理結果を格納する配列
 
@@ -33,8 +32,9 @@ export const BaseComponent = () => {
             {pokeData.length > 0 &&
                 <div style={containerStyle}>
                     <Items pokeData={pokeData} />
+                    {/* SingleData には props として渡して、MultiData では直接 atom を呼び出して使用 */}
                     <SingleData pokeItem={pokeItem} />
-                    <MultiData pokeList={pokeList} />
+                    <MultiData />
                 </div>
             }
         </>

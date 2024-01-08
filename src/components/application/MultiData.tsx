@@ -1,10 +1,9 @@
-import { pokeDataType } from "./ts/pokedata"
+import { useAtom } from "jotai";
+import { pokeListAtom } from "./ts/atom";
 
-type multiDataPropsType = {
-    pokeList: pokeDataType[];
-}
+export const MultiData = () => {
+    const [pokeList] = useAtom(pokeListAtom); // atom を呼び出して使用
 
-export const MultiData = ({ pokeList }: multiDataPropsType) => {
     const listStyle: object = {
         'lineHeight': '1.5',
         'fontSize': '14px',
